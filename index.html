@@ -19,26 +19,31 @@
         }
 
         #main-content { display: none; }
-        h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 3.5rem; margin-top: 30px; }
-        .name { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 3rem; display: block; }
+        h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 3.5rem; margin-top: 30px; text-shadow: 0 0 15px var(--primary); }
+        .name { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 3rem; display: block; text-shadow: 0 0 20px var(--accent); }
         
         .message { 
-            background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 30px; 
-            max-width: 500px; margin: 30px auto; min-height: 200px; 
-            line-height: 1.8; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px);
-            font-size: 1.1rem; text-align: left;
+            background: rgba(255, 255, 255, 0.08); padding: 30px; border-radius: 30px; 
+            max-width: 500px; margin: 30px auto; min-height: 150px; 
+            line-height: 1.8; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            font-size: 1.15rem; text-align: left; white-space: pre-line;
+            position: relative;
+        }
+
+        /* تنسيق البريق السحري أثناء الكتابة */
+        .magic-text {
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 202, 40, 0.8), 0 0 20px rgba(255, 202, 40, 0.5);
+            transition: text-shadow 0.1s;
         }
 
         .gallery { display: flex; flex-direction: column; align-items: center; gap: 25px; margin-top: 40px; opacity: 0; transition: opacity 2s; }
-        .gallery img { width: 100%; max-width: 550px; border-radius: 20px; border: 3px solid rgba(255, 255, 255, 0.2); }
+        .gallery img { width: 100%; max-width: 550px; border-radius: 20px; border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .footer { margin-top: 80px; color: var(--primary); font-size: 1rem; opacity: 0.7; }
     </style>
 </head>
 <body>
     <div class="stars"></div>
-
-    <audio id="fireworkSound" src="https://assets.mixkit.co/active_storage/sfx/2854/2854-preview.mp3"></audio>
-    <audio id="bgMusic" loop src="https://www.bensound.com/bensound-music/bensound-love.mp3"></audio>
 
     <div id="secret-button-container">
         <button class="btn-secret" onclick="showSurprise()">🎁 Secret: Click me ✨</button>
@@ -60,14 +65,46 @@
     </div>
 
     <script>
-        const text = "Querida Danna Marcela, ❤️ \n\n¡Hoy es un día muy especial para celebrar tu vida! 🥳 Gracias por ser mi luz en el cielo de Sky 🌌 و compartir tantos momentos hermosos conmigo 🎮✨.\n\nNuestra amistad significa mucho para mí. 💖 Gracias por escucharme siempre, por tu gran apoyo y por estar ahí, incluso a pesar de la distancia 🌍✈️.\n\n¡Te deseo un día lleno de risas, magia y bendiciones! 🎈🎉🎁";
+        const text = "Querida Danna Marcela, ❤️ \n\n¡Hoy es un día muy especial para celebrar tu vida! 🥳 Gracias por ser mi luz en el cielo de Sky 🌌 y por compartir tantos momentos hermosos conmigo 🎮✨.\n\nNuestra amistad significa mucho para mí. 💖 Gracias por escucharme siempre, por tu gran apoyo y por estar ahí, incluso a pesar de la distancia 🌍✈️.\n\n¡Te deseo un día lleno de risas, magia y bendiciones! 🎈🎉🎁🌈";
 
-        function typeWriter(text, i, fnCallback) {
+        // تأثير الكتابة السحرية
+        function typeWriterMagic(text, i, fnCallback) {
             if (i < text.length) {
-                document.getElementById("typewriter-text").innerHTML = text.substring(0, i+1) +'<span aria-hidden="true"></span>';
-                setTimeout(function() { typeWriter(text, i + 1, fnCallback) }, 50);
+                const char = text.charAt(i);
+                const isEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF]/.test(char + text.charAt(i+1));
+                
+                let visibleText = text.substring(0, i);
+                letcurrentChar = text.substring(i, i + (isEmoji ? 2 : 1));
+                
+                // إضافة الحرف بتأثير لامع
+                document.getElementById("typewriter-text").innerHTML = visibleText + '<span class="magic-text">' + currentChar + '</span>';
+                
+                // إطلاق غبار نجوم صغير (Sparkles) عند موضع الكتابة
+                if (Math.random() > 0.6) { // لا نطلقها مع كل حرف لكي لا تكون كثيفة جداً
+                    confetti({
+                        particleCount: 1,
+                        startVelocity: 0,
+                        ticks: 30,
+                        gravity: 0.2,
+                        origin: {
+                            x: Math.random() * 0.1 + 0.45, // تمركز حول منطقة الرسالة
+                            y: Math.random() * 0.1 + 0.4
+                        },
+                        colors: ['#ffca28', '#ffffff'],
+                        shapes: ['circle'],
+                        scalar: 0.5,
+                        zIndex: 10
+                    });
+                }
+
+                setTimeout(function() { 
+                    typeWriterMagic(text, i + (isEmoji ? 2 : 1), fnCallback) 
+                }, isEmoji ? 100 : 50); // إبطاء قليلاً عند الإيموجي
+
             } else if (typeof fnCallback == 'function') {
-                setTimeout(fnCallback, 700);
+                // إزالة التأثير اللامع عن النص كله بعد الانتهاء
+                document.getElementById("typewriter-text").innerHTML = text;
+                setTimeout(fnCallback, 500);
             }
         }
 
@@ -75,11 +112,7 @@
             document.getElementById('secret-button-container').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             
-            // تشغيل الأصوات
-            document.getElementById('fireworkSound').play();
-            document.getElementById('bgMusic').play();
-
-            // الألعاب النارية
+            // الألعاب النارية الأساسية
             var end = Date.now() + (4 * 1000);
             (function frame() {
                 confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#80deea', '#ffca28'] });
@@ -87,11 +120,11 @@
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
 
-            // البدء في كتابة النص
             document.getElementById("title").innerHTML = "¡Feliz Cumpleaños!";
-            document.getElementById("userName").innerHTML = "Danna Marcela 🎂";
+            document.getElementById("userName").innerHTML = "Danna Marcela 🎂✨";
             
-            typeWriter(text, 0, function(){
+            // البدء بالكتابة السحرية
+            typeWriterMagic(text, 0, function(){
                 document.getElementById("gallery").style.opacity = "1";
             });
         }
