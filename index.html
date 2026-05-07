@@ -3,44 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Proyecto de Programación</title>
+    <title>Un Proyecto Especial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        body { background-color: #050a18; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 20px; overflow-x: hidden; }
-        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle, #1b2735 0%, #090a0f 100%); }
-        
-        /* تنسيق زر المفاجأة */
-        #secret-button-container { display: flex; justify-content: center; align-items: center; height: 80vh; }
-        .btn-secret { background: #5bc0be; color: #050a18; border: none; padding: 15px 30px; font-size: 1.2rem; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 0 20px #5bc0be; transition: 0.3s; }
-        .btn-secret:hover { transform: scale(1.1); box-shadow: 0 0 30px #80deea; }
+        :root {
+            --primary: #80deea;
+            --accent: #ffca28; /* ذهبي */
+            --bg-dark: #050a18;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
 
-        /* المحتوى المخفي في البداية */
+        body { 
+            background-color: var(--bg-dark); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            text-align: center; 
+            margin: 0; 
+            padding: 20px; 
+            overflow-x: hidden;
+        }
+
+        .stars { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
+            background: radial-gradient(circle at center, #1b2735 0%, #050a18 100%); 
+        }
+
+        /* زر المفاجأة */
+        #secret-button-container { display: flex; justify-content: center; align-items: center; height: 90vh; }
+        .btn-secret { 
+            background: linear-gradient(45deg, #5bc0be, #ffca28); 
+            color: #050a18; border: none; padding: 20px 40px; 
+            font-size: 1.5rem; font-weight: bold; border-radius: 50px; 
+            cursor: pointer; box-shadow: 0 0 30px rgba(91, 192, 190, 0.5); 
+            transition: 0.4s; font-family: 'Poppins', sans-serif;
+        }
+        .btn-secret:hover { transform: scale(1.1) rotate(2deg); box-shadow: 0 0 50px var(--accent); }
+
         #main-content { display: none; opacity: 0; transition: opacity 2s ease-in; }
-        
-        h1 { color: #80deea; text-shadow: 0 0 15px #80deea; margin-top: 30px; font-size: 2.2rem; }
-        .name { color: #ffca28; font-size: 2.5rem; display: block; margin-top: 10px; }
-        .message { background: rgba(255, 255, 255, 0.08); padding: 25px; border-radius: 20px; max-width: 500px; margin: 30px auto; line-height: 1.8; border: 1px solid rgba(255,255,255,0.1); }
-        .gallery { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-top: 30px; }
-        .gallery img { width: 100%; max-width: 550px; height: auto; border-radius: 12px; border: 2px solid #5bc0be; box-shadow: 0 0 20px rgba(91, 192, 190, 0.2); object-fit: cover; }
-        .footer { margin-top: 60px; color: #5bc0be; font-size: 0.9rem; opacity: 0.8; }
+
+        /* تنسيق العنوان والاسم */
+        h1 { 
+            font-family: 'Dancing Script', cursive; 
+            color: var(--primary); 
+            font-size: 3.5rem; 
+            margin-bottom: 0;
+            text-shadow: 2px 2px 10px rgba(128, 222, 234, 0.5);
+        }
+        .name { 
+            font-family: 'Dancing Script', cursive;
+            color: var(--accent); 
+            font-size: 3rem; 
+            display: block; 
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 202, 40, 0.4);
+        }
+
+        .message { 
+            background: var(--glass); 
+            padding: 30px; 
+            border-radius: 30px; 
+            max-width: 500px; 
+            margin: 30px auto; 
+            line-height: 1.8; 
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            font-size: 1.1rem;
+        }
+
+        .gallery { display: flex; flex-direction: column; align-items: center; gap: 25px; margin-top: 40px; }
+        .gallery img { 
+            width: 100%; max-width: 550px; border-radius: 20px; 
+            border: 3px solid rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.5s;
+        }
+        .gallery img:hover { transform: scale(1.03); border-color: var(--accent); }
+
+        .footer { margin-top: 80px; color: var(--primary); font-size: 1rem; opacity: 0.7; font-style: italic; }
     </style>
 </head>
 <body>
     <div class="stars"></div>
 
     <div id="secret-button-container">
-        <button class="btn-secret" onclick="showSurprise()">Secret: Click me</button>
+        <button class="btn-secret" onclick="showSurprise()">🎁 Secret: Click me ✨</button>
     </div>
 
     <div id="main-content">
         <h1>¡Feliz Cumpleaños!</h1>
-        <span class="name">Danna Marcela 🎂</span>
+        <span class="name">Danna Marcela 🎂✨</span>
         
         <div class="message">
-            <p><strong>Querida Danna Marcela,</strong></p>
-            <p>Hoy celebramos tu vida. Gracias por ser mi luz en el cielo de Sky y por compartir tantos momentos hermosos conmigo.</p>
-            <p>Nuestra amistad significa mucho para mí. Gracias por escucharme, por tu apoyo y por estar ahí siempre, incluso en la distancia.</p>
-            <p>¡Te deseo un día lleno de alegría, magia y muchas bendiciones!</p>
+            <p><strong>Querida Danna Marcela, ❤️</strong></p>
+            <p>¡Hoy es un día muy especial para celebrar tu vida! 🥳 Gracias por ser mi luz en el cielo de Sky 🌌 y por compartir tantos momentos hermosos y divertidos conmigo 🎮✨.</p>
+            <p>Nuestra amistad significa mucho para mí. 💖 Gracias por escucharme siempre, por tu gran apoyo y por estar ahí, incluso a pesar de la distancia 🌍✈️.</p>
+            <p>¡Te deseo un día lleno de risas, mucha magia y bendiciones infinitas! 🎈🎉🎁🌈</p>
         </div>
 
         <div class="gallery">
@@ -53,39 +111,40 @@
             <img src="pic4••.jpg" alt="Recuerdo">
         </div>
 
-        <div class="footer">Hecho con 🤍 por Aman</div>
+        <div class="footer">Hecho con mucho cariño 🤍 por Aman</div>
     </div>
 
     <script>
         function showSurprise() {
-            // إخفاء الزر
             document.getElementById('secret-button-container').style.display = 'none';
-            
-            // إظهار المحتوى
             const content = document.getElementById('main-content');
             content.style.display = 'block';
-            setTimeout(() => { content.style.opacity = '1'; }, 10);
+            setTimeout(() => { content.style.opacity = '1'; }, 50);
 
-            // تشغيل الألعاب النارية
-            var duration = 5 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            // انفجار ألعاب نارية مكثف
+            var end = Date.now() + (4 * 1000);
+            var colors = ['#80deea', '#ffca28', '#ffffff', '#ff4081'];
 
-            function randomInRange(min, max) {
-              return Math.random() * (max - min) + min;
-            }
+            (function frame() {
+              confetti({
+                particleCount: 4,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: colors
+              });
+              confetti({
+                particleCount: 4,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: colors
+              });
 
-            var interval = setInterval(function() {
-              var timeLeft = animationEnd - Date.now();
-
-              if (timeLeft <= 0) {
-                return clearInterval(interval);
+              if (Date.now() < end) {
+                requestAnimationFrame(frame);
               }
-
-              var particleCount = 50 * (timeLeft / duration);
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
+            }());
         }
     </script>
 </body>
