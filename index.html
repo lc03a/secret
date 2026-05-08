@@ -30,9 +30,16 @@
             position: relative;
         }
 
-        /* تنسيق الوهج الذهبي على الحرف الجديد */
-        .magic-text { color: #ffca28; text-shadow: 0 0 15px #ffca28, 0 0 30px #ffca28; }
+        
 
+.magic-text { 
+    color: #ffca28; 
+    /* زدنا الأرقام هنا ليكون الوهج أقوى وأعرض */
+    text-shadow: 0 0 20px #ffca28, 0 0 40px #ffca28, 0 0 60px #ffca28; 
+}
+        
+
+        
         .gallery { display: flex; flex-direction: column; align-items: center; gap: 25px; margin-top: 40px; opacity: 0; transition: opacity 2s; }
         .gallery img { width: 100%; max-width: 550px; border-radius: 20px; border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .footer { margin-top: 80px; color: var(--primary); font-size: 1rem; opacity: 0.7; }
