@@ -7,90 +7,74 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { 
-            --primary: #80deea; /* أزرق سماوي Sky */
-            --accent: #ffca28;  /* ذهبي مشرق */
-            --bg-dark: #050a18; 
-            /* خلفية ذهبية مزخرفة للاستخدام في الإطارات */
-            --gold-pattern: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="%23ffca28" fill-opacity="0.8"><path d="M50 0 L100 50 L50 100 L0 50 Z" stroke="%23ff9100" stroke-width="2"/><path d="M10 50 L20 40 L30 50 L20 60 Z" stroke="%23ff9100"/><path d="M90 50 L80 40 L70 50 L80 60 Z" stroke="%23ff9100"/><circle cx="50" cy="50" r="10" fill="%23ffd54f" stroke="%23ff9100"/></g></svg>');
-        }
-
+        :root { --primary: #80deea; --accent: #ffca28; --bg-dark: #050a18; }
         body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; text-align: center; margin: 0; padding: 20px; overflow-x: hidden; }
         .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle, #1b2735 0%, #050a18 100%); }
         
-        /* تأثير النجمة اللامعة المتوهجة كخلفية */
-        .stars::after {
-            content: "✦"; position: fixed; top: 10%; left: 10%; font-size: 2rem; color: #fff; text-shadow: 0 0 20px #80deea, 0 0 40px #ffca28; animation: pulse 3s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.5; } }
-
         #secret-button-container { display: flex; justify-content: center; align-items: center; height: 90vh; }
         .btn-secret { 
             background: linear-gradient(45deg, #5bc0be, #ffca28); color: #050a18; border: none; 
             padding: 20px 40px; font-size: 1.5rem; font-weight: bold; border-radius: 50px; 
-            cursor: pointer; box-shadow: 0 0 40px rgba(255, 202, 40, 0.6); transition: 0.4s; 
-            position: relative; overflow: hidden;
+            cursor: pointer; box-shadow: 0 0 30px rgba(91, 192, 190, 0.5); transition: 0.4s; 
         }
-        /* لمسة لامعة على الزر */
-        .btn-secret::after {
-            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); transform: rotate(30deg); animation: shineBtn 2s infinite;
-        }
-        @keyframes shineBtn { 0% { left: -150%; } 100% { left: 100%; } }
 
         #main-content { display: none; }
-        h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 3.5rem; margin-top: 30px; text-shadow: 0 0 20px var(--primary); }
-        .name { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 3rem; display: block; text-shadow: 0 0 30px var(--accent); }
+        h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 3.5rem; margin-top: 30px; text-shadow: 0 0 15px var(--primary); }
+        .name { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 3rem; display: block; text-shadow: 0 0 20px var(--accent); }
         
-        /* --- صندوق النص بالنقوش الذهبية (Text Box) --- */
         .message { 
-            background: rgba(255, 255, 255, 0.08); padding: 35px; max-width: 500px; margin: 30px auto; min-height: 150px; 
-            line-height: 1.8; backdrop-filter: blur(12px); font-size: 1.2rem; text-align: left; white-space: pre-line; position: relative;
-            
-            /* الإطار المنقوش */
-            border-style: solid;
-            border-width: 15px; /* سمك الإطار المنقوش */
-            border-image-source: var(--gold-pattern);
-            border-image-slice: 40; /* تحديد كيفية تقطيع الصورة */
-            border-image-repeat: repeat;
-            border-radius: 30px; /* للأسف border-image لا يتماشى مع الـ border-radius بشكل مباشر في كل المتصفحات، لذا وضعنا خلفية مقصوصة */
-            
-            /* تأثير لمعان ذهبي متغير */
-            box-shadow: 0 0 20px rgba(255, 202, 40, 0.3), inset 0 0 10px rgba(255, 202, 40, 0.2);
-        }
-        /* لمعان سحري متغير فوق الإطار */
-        .message::after {
-            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: inherit;
-            background: linear-gradient(45deg, transparent, rgba(255, 202, 40, 0.1), transparent);
-            filter: blur(5px); animation: shineGold 4s infinite; z-index: -1;
+            background: rgba(255, 255, 255, 0.08); padding: 35px; border-radius: 30px; 
+            max-width: 500px; margin: 30px auto; min-height: 150px; 
+            line-height: 1.8; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(12px);
+            font-size: 1.2rem; text-align: left; white-space: pre-line; position: relative;
         }
 
-        /* التوهج الذهبي القوي بـ 8 طبقات (كما طلبته سابقاً) */
         .magic-text { 
             color: #ffca28; 
             text-shadow: 0 0 10px #ffca28, 0 0 25px #ffca28, 0 0 45px #ffca28, 0 0 70px #ffca28, 0 0 90px #ffca28, 0 0 120px #ffca28;
             font-weight: bold;
         }
 
-        /* --- إطارات الصور المنقوشة (Photo Frames) --- */
-        .gallery { display: flex; flex-direction: column; align-items: center; gap: 30px; margin-top: 50px; }
-        .gallery img { 
-            width: 100%; max-width: 550px; 
-            /* الإطار المنقوش الذهبي */
-            border-style: solid;
-            border-width: 10px; /* سمك إطار الصور */
-            border-image-source: var(--gold-pattern);
-            border-image-slice: 30;
-            border-image-repeat: repeat;
-            border-radius: 15px; /* خلفية مقصوصة */
-            
-            box-shadow: 0 15px 50px rgba(0,0,0,0.7), 0 0 20px rgba(255, 202, 40, 0.4);
-            opacity: 0; transform: scale(0.95); transition: opacity 1.5s, transform 1.5s, box-shadow 0.5s;
+        /* --- الحل الجديد للإطارات الذهبية الفخمة (Photo Frames) --- */
+        .gallery { display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 50px; }
+        
+        /* حاوية الصورة لضبط الطبقات */
+        .frame-container {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            opacity: 0; transform: scale(0.95); transition: opacity 1.5s, transform 1.5s;
         }
-        .gallery img.show { opacity: 1; transform: scale(1); }
-        .gallery img:hover { transform: scale(1.02); box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px #ffca28; }
+        .frame-container.show { opacity: 1; transform: scale(1); }
 
-        @keyframes shineGold { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        /* صورة Danna Marcela الأصلية */
+        .frame-container img { 
+            width: 100%; 
+            height: auto;
+            border-radius: 15px; /* قص خفيف للأركان لتناسب الإطار */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            display: block;
+        }
+
+        /* الطبقة الذهبية الفخمة (الإطار العائم) */
+        .gold-frame-overlay {
+            position: absolute;
+            top: -15px; left: -15px; right: -15px; bottom: -15px; /* تمديد الإطار قليلاً للخارج */
+            pointer-events: none; /* يسمح بالضغط على الصورة من خلاله */
+            
+            /* استخدام تقنية CSS المدمجة لرسم إطار ذهبي منقوش */
+            border-style: solid;
+            border-width: 25px; /* سمك الإطار الذهبي المنقوش */
+            
+            /* خلفية ذهبية مزخرفة للاستخدام في الإطارات */
+            border-image-source: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="%23ffca28" fill-opacity="0.8"><path d="M50 0 L100 50 L50 100 L0 50 Z" stroke="%23ff9100" stroke-width="2"/><path d="M10 50 L20 40 L30 50 L20 60 Z" stroke="%23ff9100"/><path d="M90 50 L80 40 L70 50 L80 60 Z" stroke="%23ff9100"/><circle cx="50" cy="50" r="10" fill="%23ffd54f" stroke="%23ff9100"/></g></svg>');
+            border-image-slice: 40; /* تحديد كيفية تقطيع الصورة الذهبية */
+            border-image-repeat: repeat;
+            
+            /* تأثير لمعان سحري متغير */
+            box-shadow: 0 0 20px rgba(255, 202, 40, 0.4), inset 0 0 10px rgba(255, 202, 40, 0.2);
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+        }
 
         .footer { margin-top: 100px; color: var(--primary); font-size: 1rem; opacity: 0.7; font-weight: bold; text-shadow: 0 0 10px var(--primary); }
     </style>
@@ -107,16 +91,19 @@
         <span class="name" id="userName"></span>
         <div class="message"><div id="typewriter-text"></div></div>
         <div class="gallery" id="gallery">
-            <img src="pic1.jpg"> <img src="pic1••.jpg">
-            <img src="pic2.jpg"> <img src="pic2••.jpg">
-            <img src="pic3.jpg"> <img src="pic3••.jpg">
-            <img src="pic4••.jpg">
+            <div class="frame-container"><img src="pic1.jpg"><div class="gold-frame-overlay"></div></div>
+            <div class="frame-container"><img src="pic1••.jpg"><div class="gold-frame-overlay"></div></div>
+            <div class="frame-container"><img src="pic2.jpg"><div class="gold-frame-overlay"></div></div>
+            <div class="frame-container"><img src="pic2••.jpg"><div class="gold-frame-overlay"></div></div>
+            <div class="frame-container"><img src="pic3.jpg"><div class="gold-frame-overlay"></div></div>
+            <div class="frame-container"><img src="pic3••.jpg"><div class="gold-frame-overlay"></div></div>
+            <div class="frame-container"><img src="pic4••.jpg"><div class="gold-frame-overlay"></div></div>
         </div>
         <div class="footer">Hecho con mucho cariño 🤍 por Aman</div>
     </div>
 
     <script>
-        const text = "Querida Danna Marcela, ❤️ \n\n¡Hoy es un día muy especial para celebrar tu vida! 🥳 Gracias por ser mi luz en el cielo de Sky 🌌 y por compartir tantos momentos hermosos conmigo 🎮✨.\n\nNuestra amistad significa mucho para mí. 💖 Gracias por escucharme siempre, por tu gran apoyo y por estar ahí, incluso a pesar de la distancia 🌍✈️.\n\n¡Te deseo un día lleno de risas, magia y bendiciones! 🎈🎉🎁🌈";
+        const text = "Querida Danna Marcela, ❤️ \n\n¡Hoy es un día muy especial para celebrar tu vida! 🥳 Gracias por ser mi luz en el cielo de Sky 🌌 y por compartir tantos momentos hermosos conmigo 🎮✨.\n\nNuestra amistad significa mucho para mí. 💖 Gracias por escucharme siempre, por tu gran apoio y por estar ahí, incluso a pesar de la distancia 🌍✈️.\n\n¡Te deseo un día lleno de risas, magia y bendiciones! 🎈🎉🎁🌈";
 
         function typeWriterMagic(text, i, fnCallback) {
             const textElement = document.getElementById("typewriter-text");
@@ -131,8 +118,9 @@
                 const lastCharElement = textElement.querySelector('.magic-text');
                 if (lastCharElement) {
                     const rect = lastCharElement.getBoundingClientRect();
+                    // البريق المكثف (أكثر بـ 3 مرات) كما طلبته
                     confetti({
-                        particleCount: 15, // كثافة عالية (كما طلبت سابقاً)
+                        particleCount: 15,
                         startVelocity: 2,
                         ticks: 60,
                         gravity: 0.1,
@@ -155,11 +143,12 @@
         }
 
         function showImagesSequentially() {
-            const images = document.querySelectorAll('.gallery img');
+            // تحديث طريقة اختيار العناصر للحاوية الجديدة
+            const frames = document.querySelectorAll('.gallery .frame-container');
             let delay = 0;
-            images.forEach((img) => {
+            frames.forEach((frame) => {
                 setTimeout(() => {
-                    img.classList.add('show');
+                    frame.classList.add('show');
                 }, delay);
                 delay += 1000;
             });
@@ -169,6 +158,7 @@
             document.getElementById('secret-button-container').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             
+            // الألعاب النارية الكبيرة عند البداية
             var end = Date.now() + (5 * 1000);
             (function frame() {
                 confetti({ particleCount: 10, angle: 60, spread: 70, origin: { x: 0 }, colors: ['#80deea', '#ffca28'] });
