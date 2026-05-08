@@ -26,24 +26,33 @@
             background: rgba(255, 255, 255, 0.08); padding: 35px; border-radius: 30px; 
             max-width: 500px; margin: 30px auto; min-height: 150px; 
             line-height: 1.8; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(12px);
-            font-size: 1.2rem; text-align: left; white-space: pre-line;
-            position: relative;
+            font-size: 1.2rem; text-align: left; white-space: pre-line; position: relative;
         }
 
-        /* توهج أقوى بـ 8 مرات */
         .magic-text { 
             color: #ffca28; 
-            text-shadow: 0 0 10px #ffca28, 0 0 25px #ffca28, 0 0 45px #ffca28, 0 0 70px #ffca28, 0 0 90px #ffca28, 0 0 120px #ffca28;
+            text-shadow: 0 0 15px #ffca28, 0 0 35px #ffca28, 0 0 60px #ffca28, 0 0 90px #ffca28;
             font-weight: bold;
         }
 
-        .gallery { display: flex; flex-direction: column; align-items: center; gap: 25px; margin-top: 40px; opacity: 0; transition: opacity 2s; }
-        .gallery img { width: 100%; max-width: 550px; border-radius: 20px; border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .gallery { display: flex; flex-direction: column; align-items: center; gap: 25px; margin-top: 40px; }
+        .gallery img { 
+            width: 100%; max-width: 550px; border-radius: 20px; 
+            border: 3px solid rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            opacity: 0; transform: translateY(20px); transition: 1s;
+        }
+        .gallery img.show { opacity: 1; transform: translateY(0); }
         .footer { margin-top: 80px; color: var(--primary); font-size: 1rem; opacity: 0.7; }
     </style>
 </head>
 <body>
     <div class="stars"></div>
+
+    <audio id="soundClick" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+    <audio id="soundFirework" src="https://assets.mixkit.co/active_storage/sfx/2854/2854-preview.mp3"></audio>
+    <audio id="soundMagic" src="https://assets.mixkit.co/active_storage/sfx/1384/1384-preview.mp3" volume="0.3"></audio>
+    <audio id="soundPop" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
     <div id="secret-button-container">
         <button class="btn-secret" onclick="showSurprise()">🎁 Secret: Click me ✨</button>
@@ -67,6 +76,8 @@
 
         function typeWriterMagic(text, i, fnCallback) {
             const textElement = document.getElementById("typewriter-text");
+            const magicSound = document.getElementById("soundMagic");
+            
             if (i < text.length) {
                 const char = text.charAt(i);
                 const isEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF]/.test(char + text.charAt(i+1));
@@ -75,29 +86,31 @@
                 
                 textElement.innerHTML = visibleText + '<span class="magic-text">' + currentChar + '</span>';
                 
+                // تشغيل صوت الكتابة السحرية بشكل متقطع ليكون واقعياً
+                if (i % 3 === 0) { 
+                    magicSound.currentTime = 0;
+                    magicSound.play();
+                }
+
                 const lastCharElement = textElement.querySelector('.magic-text');
                 if (lastCharElement) {
                     const rect = lastCharElement.getBoundingClientRect();
-                    const sparkleX = (rect.left + rect.width / 2) / window.innerWidth;
-                    const sparkleY = (rect.top + rect.height / 2) / window.innerHeight;
-
-                    // بريق أكثر بـ 3 مرات (زيادة العدد والانتشار)
                     confetti({
-                        particleCount: 15, 
+                        particleCount: 12,
                         startVelocity: 2,
-                        ticks: 60,
+                        ticks: 45,
                         gravity: 0.1,
-                        origin: { x: sparkleX, y: sparkleY },
-                        colors: ['#ffca28', '#ffffff', '#ffd54f', '#fff176'],
+                        origin: { x: (rect.left + rect.width / 2) / window.innerWidth, y: (rect.top + rect.height / 2) / window.innerHeight },
+                        colors: ['#ffca28', '#ffffff', '#fff176'],
                         shapes: ['circle', 'star'],
-                        scalar: 0.8,
+                        scalar: 0.7,
                         zIndex: 10
                     });
                 }
 
                 setTimeout(function() { 
                     typeWriterMagic(text, i + (isEmoji ? 2 : 1), fnCallback) 
-                }, isEmoji ? 100 : 50);
+                }, isEmoji ? 100 : 55);
 
             } else if (typeof fnCallback == 'function') {
                 textElement.innerHTML = text;
@@ -105,14 +118,32 @@
             }
         }
 
+        function showImagesSequentially() {
+            const images = document.querySelectorAll('.gallery img');
+            const popSound = document.getElementById('soundPop');
+            let delay = 0;
+
+            images.forEach((img, index) => {
+                setTimeout(() => {
+                    img.classList.add('show');
+                    popSound.currentTime = 0;
+                    popSound.play();
+                }, delay);
+                delay += 800; // الفرق الزمني بين ظهور كل صورة
+            });
+        }
+
         function showSurprise() {
+            document.getElementById('soundClick').play();
+            document.getElementById('soundFirework').play();
+            
             document.getElementById('secret-button-container').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             
-            var end = Date.now() + (5 * 1000);
+            var end = Date.now() + (4 * 1000);
             (function frame() {
-                confetti({ particleCount: 10, angle: 60, spread: 70, origin: { x: 0 }, colors: ['#80deea', '#ffca28'] });
-                confetti({ particleCount: 10, angle: 120, spread: 70, origin: { x: 1 }, colors: ['#80deea', '#ffca28'] });
+                confetti({ particleCount: 8, angle: 60, spread: 60, origin: { x: 0 }, colors: ['#80deea', '#ffca28'] });
+                confetti({ particleCount: 8, angle: 120, spread: 60, origin: { x: 1 }, colors: ['#80deea', '#ffca28'] });
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
 
@@ -120,7 +151,7 @@
             document.getElementById("userName").innerHTML = "Danna Marcela 🎂✨";
             
             typeWriterMagic(text, 0, function(){
-                document.getElementById("gallery").style.opacity = "1";
+                showImagesSequentially();
             });
         }
     </script>
