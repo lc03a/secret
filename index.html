@@ -30,7 +30,8 @@
             position: relative;
         }
 
-        .magic-text { color: white; text-shadow: 0 0 10px rgba(255, 202, 40, 0.8), 0 0 20px rgba(255, 202, 40, 0.5); }
+        /* تنسيق الوهج الذهبي على الحرف الجديد */
+        .magic-text { color: #ffca28; text-shadow: 0 0 15px #ffca28, 0 0 30px #ffca28; }
 
         .gallery { display: flex; flex-direction: column; align-items: center; gap: 25px; margin-top: 40px; opacity: 0; transition: opacity 2s; }
         .gallery img { width: 100%; max-width: 550px; border-radius: 20px; border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -41,13 +42,17 @@
     <div class="stars"></div>
 
     <div id="secret-button-container">
-        <button class="btn-secret" onclick="showSurprise()">Click me</button>
+        <button class="btn-secret" onclick="showSurprise()">🎁 Secret: Click me ✨</button>
     </div>
 
     <div id="main-content">
         <h1 id="title"></h1>
         <span class="name" id="userName"></span>
-        <div class="message" id="typewriter-text"></div>
+        
+        <div class="message">
+            <div id="typewriter-text"></div>
+        </div>
+
         <div class="gallery" id="gallery">
             <img src="pic1.jpg"> <img src="pic1••.jpg">
             <img src="pic2.jpg"> <img src="pic2••.jpg">
@@ -60,23 +65,50 @@
     <script>
         const text = "Querida Danna Marcela, ❤️ \n\n¡Hoy es un día muy especial para celebrar tu vida! 🥳 Gracias por ser mi luz en el cielo de Sky 🌌 y por compartir tantos momentos hermosos conmigo 🎮✨.\n\nNuestra amistad significa mucho para mí. 💖 Gracias por escucharme siempre, por tu gran apoyo y por estar ahí, incluso a pesar de la distancia 🌍✈️.\n\n¡Te deseo un día lleno de risas, magia y bendiciones! 🎈🎉🎁🌈";
 
+        // تأثير الكتابة السحرية (نسخة مطورة تحسب الموضع)
         function typeWriterMagic(text, i, fnCallback) {
+            const textElement = document.getElementById("typewriter-text");
             if (i < text.length) {
                 const char = text.charAt(i);
                 const isEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF]/.test(char + text.charAt(i+1));
+                
                 let visibleText = text.substring(0, i);
                 let currentChar = text.substring(i, i + (isEmoji ? 2 : 1));
-                document.getElementById("typewriter-text").innerHTML = visibleText + '<span class="magic-text">' + currentChar + '</span>';
                 
-                if (Math.random() > 0.7) {
-                    confetti({ particleCount: 1, startVelocity: 0, ticks: 20, gravity: 0.3, origin: { x: 0.5, y: 0.5 }, colors: ['#ffca28'], scalar: 0.5 });
+                // إضافة الحرف بتأثير توهج أقوى
+                textElement.innerHTML = visibleText + '<span class="magic-text">' + currentChar + '</span>';
+                
+                // --- الكود الجديد لحساب الموضع ---
+                const lastCharElement = textElement.querySelector('.magic-text');
+                if (lastCharElement && Math.random() > 0.4) { // زدت التكرار ليصبح البريق أوضح
+                    const rect = lastCharElement.getBoundingClientRect();
+                    
+                    // حساب الإحداثيات النسبية للشاشة (x, y) بين 0 و 1
+                    const sparkleX = (rect.left + rect.width / 2) / window.innerWidth;
+                    const sparkleY = (rect.top + rect.height / 2) / window.innerHeight;
+
+                    // إطلاق غبار النجوم من موضع الحرف بالضبط
+                    confetti({
+                        particleCount: 2, // زدت العدد من 1 إلى 2 لبريق أقوى
+                        startVelocity: 1,
+                        ticks: 40, // جعلت التأثير يدوم أطول قليلاً
+                        gravity: 0.1,
+                        origin: { x: sparkleX, y: sparkleY },
+                        colors: ['#ffca28', '#ffffff'], // ذهبي وأبيض
+                        shapes: ['circle'],
+                        scalar: 0.6, // حجم البريق
+                        zIndex: 10
+                    });
                 }
+                // ---------------------------------
 
                 setTimeout(function() { 
                     typeWriterMagic(text, i + (isEmoji ? 2 : 1), fnCallback) 
                 }, isEmoji ? 100 : 50);
+
             } else if (typeof fnCallback == 'function') {
-                document.getElementById("typewriter-text").innerHTML = text;
+                // إزالة التأثير الملون بعد الانتهاء
+                textElement.innerHTML = text;
                 setTimeout(fnCallback, 500);
             }
         }
@@ -85,6 +117,7 @@
             document.getElementById('secret-button-container').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             
+            // الألعاب النارية الأساسية (Confetti) عند البداية
             var end = Date.now() + (4 * 1000);
             (function frame() {
                 confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#80deea', '#ffca28'] });
@@ -95,6 +128,7 @@
             document.getElementById("title").innerHTML = "¡Feliz Cumpleaños!";
             document.getElementById("userName").innerHTML = "Danna Marcela 🎂✨";
             
+            // البدء بالكتابة السحرية
             typeWriterMagic(text, 0, function(){
                 document.getElementById("gallery").style.opacity = "1";
             });
