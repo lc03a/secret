@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Un Proyecto Especial para Danna</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Caveat:wght@400;700&family=Playfair+Display:ital,wght=1,600&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root { 
@@ -28,13 +28,82 @@
 
         .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
         
-        #secret-button-container { display: flex; justify-content: center; align-items: center; height: 90vh; }
-        
+        #secret-button-container { 
+            display: flex; 
+            flex-direction: column; /* ترتيب رأسي للعناصر */
+            justify-content: center; 
+            align-items: center; 
+            height: 90vh; 
+            position: relative;
+        }
+
+        /* تنسيق الجملة التحذيرية فوق الزر */
+        .click-warning {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            margin-bottom: 20px; /* مسافة فوق الزر */
+            text-transform: lowercase;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* --- تنسيق الزر الجديد باللون الأسود والأبيض --- */
         .btn-secret { 
-            background: linear-gradient(45deg, var(--ruby-red), var(--sky-blue)); 
-            color: white; border: none; 
-            padding: 20px 40px; font-size: 1.5rem; font-weight: bold; border-radius: 50px; 
-            cursor: pointer; box-shadow: 0 0 30px rgba(255, 0, 60, 0.4); transition: 0.4s; 
+            background-color: #000000; /* خلفية سوداء محايدة */
+            color: #ffffff; /* نص أبيض محايد */
+            border: 2px solid rgba(255, 255, 255, 0.3); /* حافة بيضاء خفيفة */
+            padding: 20px 50px; 
+            font-size: 1.6rem; 
+            font-weight: 600; 
+            border-radius: 10px; /* زوايا أقل حدة لفخامة عصرية */
+            cursor: pointer; 
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); 
+            transition: 0.4s ease-in-out; 
+            text-transform: none;
+            position: relative; /* ضروري لوضع الأسهم */
+            z-index: 10;
+        }
+        .btn-secret:hover {
+            background-color: #ffffff; /* يتحول للأبيض عند التمرير */
+            color: #000000; /* النص يصبح أسود */
+            border-color: #000000;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            transform: scale(1.03);
+        }
+
+        /* --- تنسيق وحركة الأسهم (Top & Bottom) --- */
+        .arrow {
+            position: absolute;
+            color: #ffffff;
+            font-size: 2.5rem;
+            opacity: 0.8;
+            animation: arrowBlink 1.5s infinite;
+            pointer-events: none; /* لا يتداخل مع الضغط على الزر */
+        }
+
+        /* السهم العلوي */
+        .arrow-top {
+            bottom: 110%; /* فوق الزر بقليل */
+            left: 50%;
+            transform: translateX(-50%) rotate(0deg); /* يشير لأسفل */
+        }
+        
+        /* السهم السفلي */
+        .arrow-bottom {
+            top: 110%; /* تحت الزر بقليل */
+            left: 50%;
+            transform: translateX(-50%) rotate(180deg); /* يشير لأعلى */
+        }
+
+        @keyframes arrowBlink {
+            0%, 100% { opacity: 0.3; transform: translateX(-50%) translateY(0px); }
+            50% { opacity: 1; transform: translateX(-50%) translateY(10px); } /* حركة نبضية */
+        }
+        /* تعديل اتجاه الحركة للسهم السفلي */
+        .arrow-bottom { animation-name: arrowBlinkBottom; }
+        @keyframes arrowBlinkBottom {
+            0%, 100% { opacity: 0.3; transform: translateX(-50%) rotate(180deg) translateY(0px); }
+            50% { opacity: 1; transform: translateX(-50%) rotate(180deg) translateY(-10px); }
         }
 
         #main-content { display: none; }
@@ -57,7 +126,6 @@
             margin-bottom: 20px;
         }
         
-        /* التعديل الجديد لخط الرسالة (خط يدوي فخم) */
         .message { 
             background: rgba(255, 255, 255, 0.05); 
             padding: 40px; border-radius: 25px; 
@@ -65,7 +133,6 @@
             line-height: 1.4; 
             border: 1px solid rgba(255, 255, 255, 0.1); 
             backdrop-filter: blur(15px);
-            /* استخدام خط Caveat هنا */
             font-family: 'Caveat', cursive;
             font-size: 1.8rem; 
             text-align: left; 
@@ -102,7 +169,11 @@
     <div class="stars"></div>
 
     <div id="secret-button-container">
-        <button class="btn-secret" onclick="showSurprise()">Don't click</button>
+        <div class="click-warning">⚠️ click this button</div>
+        
+        <button class="btn-secret" onclick="showSurprise()">
+            <span class="arrow arrow-top">▼</span> 🎁 Don't click ✨
+            <span class="arrow arrow-bottom">▼</span> </button>
     </div>
 
     <div id="main-content">
