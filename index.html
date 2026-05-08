@@ -22,61 +22,51 @@
         h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 3.5rem; margin-top: 30px; text-shadow: 0 0 15px var(--primary); }
         .name { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 3rem; display: block; text-shadow: 0 0 20px var(--accent); }
         
+        /* صندوق النص بنقوش ذهبية باستخدام صورتك الجديدة */
         .message { 
-            background: rgba(255, 255, 255, 0.08); padding: 35px; border-radius: 30px; 
+            background: rgba(255, 255, 255, 0.08); padding: 35px; border-radius: 10px; 
             max-width: 500px; margin: 30px auto; min-height: 150px; 
-            line-height: 1.8; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(12px);
+            line-height: 1.8; backdrop-filter: blur(12px);
             font-size: 1.2rem; text-align: left; white-space: pre-line; position: relative;
+            
+            border: 25px solid transparent;
+            border-image: url('frame.jpg') 150 round; /* استخدمنا الامتداد الجديد */
         }
 
         .magic-text { 
             color: #ffca28; 
-            text-shadow: 0 0 10px #ffca28, 0 0 25px #ffca28, 0 0 45px #ffca28, 0 0 70px #ffca28, 0 0 90px #ffca28, 0 0 120px #ffca28;
+            text-shadow: 0 0 15px #ffca28, 0 0 30px #ffca28, 0 0 50px #ffca28;
             font-weight: bold;
         }
 
-        /* --- الحل الجديد للإطارات الذهبية الفخمة (Photo Frames) --- */
-        .gallery { display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 50px; }
+        .gallery { display: flex; flex-direction: column; align-items: center; gap: 50px; margin-top: 50px; }
         
-        /* حاوية الصورة لضبط الطبقات */
-        .frame-container {
+        .img-wrapper {
             position: relative;
-            width: 100%;
-            max-width: 550px;
-            opacity: 0; transform: scale(0.95); transition: opacity 1.5s, transform 1.5s;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            opacity: 0; transform: scale(0.9); transition: 1.5s;
         }
-        .frame-container.show { opacity: 1; transform: scale(1); }
+        .img-wrapper.show { opacity: 1; transform: scale(1); }
 
-        /* صورة Danna Marcela الأصلية */
-        .frame-container img { 
+        .img-wrapper img { 
             width: 100%; 
-            height: auto;
-            border-radius: 15px; /* قص خفيف للأركان لتناسب الإطار */
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             display: block;
+            border-radius: 5px;
         }
 
-        /* الطبقة الذهبية الفخمة (الإطار العائم) */
-        .gold-frame-overlay {
+        /* الإطار الذهبي الحقيقي (frame.jpg) */
+        .img-wrapper::after {
+            content: "";
             position: absolute;
-            top: -15px; left: -15px; right: -15px; bottom: -15px; /* تمديد الإطار قليلاً للخارج */
-            pointer-events: none; /* يسمح بالضغط على الصورة من خلاله */
-            
-            /* استخدام تقنية CSS المدمجة لرسم إطار ذهبي منقوش */
-            border-style: solid;
-            border-width: 25px; /* سمك الإطار الذهبي المنقوش */
-            
-            /* خلفية ذهبية مزخرفة للاستخدام في الإطارات */
-            border-image-source: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="%23ffca28" fill-opacity="0.8"><path d="M50 0 L100 50 L50 100 L0 50 Z" stroke="%23ff9100" stroke-width="2"/><path d="M10 50 L20 40 L30 50 L20 60 Z" stroke="%23ff9100"/><path d="M90 50 L80 40 L70 50 L80 60 Z" stroke="%23ff9100"/><circle cx="50" cy="50" r="10" fill="%23ffd54f" stroke="%23ff9100"/></g></svg>');
-            border-image-slice: 40; /* تحديد كيفية تقطيع الصورة الذهبية */
-            border-image-repeat: repeat;
-            
-            /* تأثير لمعان سحري متغير */
-            box-shadow: 0 0 20px rgba(255, 202, 40, 0.4), inset 0 0 10px rgba(255, 202, 40, 0.2);
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border: 45px solid transparent;
+            border-image: url('frame.jpg') 150 stretch; /* تم ضبط الـ slice ليتناسب مع صورتك */
+            pointer-events: none;
         }
 
-        .footer { margin-top: 100px; color: var(--primary); font-size: 1rem; opacity: 0.7; font-weight: bold; text-shadow: 0 0 10px var(--primary); }
+        .footer { margin-top: 100px; color: var(--primary); font-size: 1rem; opacity: 0.7; }
     </style>
 </head>
 <body>
@@ -91,86 +81,56 @@
         <span class="name" id="userName"></span>
         <div class="message"><div id="typewriter-text"></div></div>
         <div class="gallery" id="gallery">
-            <div class="frame-container"><img src="pic1.jpg"><div class="gold-frame-overlay"></div></div>
-            <div class="frame-container"><img src="pic1••.jpg"><div class="gold-frame-overlay"></div></div>
-            <div class="frame-container"><img src="pic2.jpg"><div class="gold-frame-overlay"></div></div>
-            <div class="frame-container"><img src="pic2••.jpg"><div class="gold-frame-overlay"></div></div>
-            <div class="frame-container"><img src="pic3.jpg"><div class="gold-frame-overlay"></div></div>
-            <div class="frame-container"><img src="pic3••.jpg"><div class="gold-frame-overlay"></div></div>
-            <div class="frame-container"><img src="pic4••.jpg"><div class="gold-frame-overlay"></div></div>
+            <div class="img-wrapper"><img src="pic1.jpg"></div>
+            <div class="img-wrapper"><img src="pic1••.jpg"></div>
+            <div class="img-wrapper"><img src="pic2.jpg"></div>
+            <div class="img-wrapper"><img src="pic2••.jpg"></div>
+            <div class="img-wrapper"><img src="pic3.jpg"></div>
+            <div class="img-wrapper"><img src="pic3••.jpg"></div>
+            <div class="img-wrapper"><img src="pic4••.jpg"></div>
         </div>
         <div class="footer">Hecho con mucho cariño 🤍 por Aman</div>
     </div>
 
     <script>
-        const text = "Querida Danna Marcela, ❤️ \n\n¡Hoy es un día muy especial para celebrar tu vida! 🥳 Gracias por ser mi luz en el cielo de Sky 🌌 y por compartir tantos momentos hermosos conmigo 🎮✨.\n\nNuestra amistad significa mucho para mí. 💖 Gracias por escucharme siempre, por tu gran apoio y por estar ahí, incluso a pesar de la distancia 🌍✈️.\n\n¡Te deseo un día lleno de risas, magia y bendiciones! 🎈🎉🎁🌈";
+        const text = "Querida Danna Marcela, ❤️ \n\n¡Hoy es un día muy especial para celebrar tu vida! 🥳 Gracias por ser mi luz en el cielo de Sky 🌌 y por compartir tantos momentos hermosos conmigo 🎮✨.\n\nNuestra amistad significa mucho para mí. 💖 Gracias por escucharme siempre, por tu gran apoyo y por estar ahí, incluso a pesar de la distancia 🌍✈️.\n\n¡Te deseo un día lleno de risas, magia y bendiciones! 🎈🎉🎁🌈";
 
         function typeWriterMagic(text, i, fnCallback) {
             const textElement = document.getElementById("typewriter-text");
             if (i < text.length) {
                 const char = text.charAt(i);
                 const isEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF]/.test(char + text.charAt(i+1));
-                let visibleText = text.substring(0, i);
-                let currentChar = text.substring(i, i + (isEmoji ? 2 : 1));
-                
-                textElement.innerHTML = visibleText + '<span class="magic-text">' + currentChar + '</span>';
+                textElement.innerHTML = text.substring(0, i) + '<span class="magic-text">' + text.substring(i, i + (isEmoji ? 2 : 1)) + '</span>';
                 
                 const lastCharElement = textElement.querySelector('.magic-text');
                 if (lastCharElement) {
                     const rect = lastCharElement.getBoundingClientRect();
-                    // البريق المكثف (أكثر بـ 3 مرات) كما طلبته
                     confetti({
                         particleCount: 15,
                         startVelocity: 2,
-                        ticks: 60,
-                        gravity: 0.1,
                         origin: { x: (rect.left + rect.width / 2) / window.innerWidth, y: (rect.top + rect.height / 2) / window.innerHeight },
-                        colors: ['#ffca28', '#ffffff', '#ffd54f'],
+                        colors: ['#ffca28', '#ffffff'],
                         shapes: ['circle', 'star'],
-                        scalar: 0.8,
-                        zIndex: 10
+                        scalar: 0.7
                     });
                 }
-
-                setTimeout(function() { 
-                    typeWriterMagic(text, i + (isEmoji ? 2 : 1), fnCallback) 
-                }, isEmoji ? 100 : 45);
-
-            } else if (typeof fnCallback == 'function') {
+                setTimeout(() => typeWriterMagic(text, i + (isEmoji ? 2 : 1), fnCallback), isEmoji ? 100 : 50);
+            } else if (fnCallback) {
                 textElement.innerHTML = text;
                 setTimeout(fnCallback, 500);
             }
-        }
-
-        function showImagesSequentially() {
-            // تحديث طريقة اختيار العناصر للحاوية الجديدة
-            const frames = document.querySelectorAll('.gallery .frame-container');
-            let delay = 0;
-            frames.forEach((frame) => {
-                setTimeout(() => {
-                    frame.classList.add('show');
-                }, delay);
-                delay += 1000;
-            });
         }
 
         function showSurprise() {
             document.getElementById('secret-button-container').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             
-            // الألعاب النارية الكبيرة عند البداية
-            var end = Date.now() + (5 * 1000);
-            (function frame() {
-                confetti({ particleCount: 10, angle: 60, spread: 70, origin: { x: 0 }, colors: ['#80deea', '#ffca28'] });
-                confetti({ particleCount: 10, angle: 120, spread: 70, origin: { x: 1 }, colors: ['#80deea', '#ffca28'] });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-
             document.getElementById("title").innerHTML = "¡Feliz Cumpleaños!";
             document.getElementById("userName").innerHTML = "Danna Marcela 🎂✨";
             
             typeWriterMagic(text, 0, function(){
-                showImagesSequentially();
+                const wrappers = document.querySelectorAll('.img-wrapper');
+                wrappers.forEach((w, i) => setTimeout(() => w.classList.add('show'), i * 1000));
             });
         }
     </script>
